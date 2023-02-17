@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.practicum.ewm.EndpointHitResponse;
 import ru.practicum.ewm.EndpointHitPost;
 import ru.practicum.ewm.ViewStatsDto;
-import ru.practicum.ewm.model.ViewStats;
 import ru.practicum.ewm.service.StatsService;
 
 @Slf4j
@@ -36,7 +34,7 @@ public class StatsController {
     public List<ViewStatsDto> getStat(@RequestParam("start") LocalDateTime start,
                                       @RequestParam("end") LocalDateTime end,
                                       @RequestParam(value = "uris", required = false,
-                                                     defaultValue = "") List<String> uris,
+                                              defaultValue = "") List<String> uris,
                                       @RequestParam(value = "unique", defaultValue = "false") boolean unique) {
         log.info("GET statistic with params: start = {}, end = {}, "
                 + "uris = {}, unique = {}", start, end, uris, unique);
