@@ -2,58 +2,60 @@ package ru.practicum.ewm.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
+import ru.practicum.ewm.EndpointHitPost;
+import ru.practicum.ewm.ViewStatsDto;
+import ru.practicum.ewm.mapper.StatsMapper;
+import ru.practicum.ewm.model.App;
 import ru.practicum.ewm.model.EndpointHit;
 import ru.practicum.ewm.model.ViewStats;
 import ru.practicum.ewm.repository.StatsRepository;
 
-@Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StatsService {
 
+    private final AppService appService;
+    private final StatsMapper mapper;
     private final StatsRepository statsRepository;
 
-    public void save(EndpointHit endpointHit) {
-        log.debug("Save endpoint hit to DB: {}", endpointHit);
+    @Transactional
+    public void addStat(EndpointHitPost statsDto) {
+        App app = appService.findByApp(statsDto.getApp());
+        EndpointHit endpointHit = mapper.toEndpointHit(statsDto, app);
         statsRepository.save(endpointHit);
     }
 
-    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end,
-                                    String[] uri, boolean unique) {
-        List<ViewStats> viewStats;
+    public List<ViewStatsDto> getStat(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        List<ViewStats> statsList;
 
-        log.debug("Get stats with the next params: start - {}, end - {}, uri - {}, unique - {}",
-                start, end, uri, unique);
+        if (unique) {
+            if (uris.isEmpty()) {
+                return convertStatsToDtoList(statsRepository.getUniqueStatsWithEmptyUris(start, end));
+            }
 
-        if (!unique) {
-            viewStats = statsRepository.findAllNotUnique(start, end);
+            statsList = statsRepository.getUniqueStats(start, end, uris);
         } else {
-            viewStats = statsRepository.findAllUnique(start, end);
+            if (uris.isEmpty()) {
+                return convertStatsToDtoList(statsRepository.getStatsWithEmptyUris(start, end));
+            }
+
+            statsList = statsRepository.getStats(start, end, uris);
         }
 
-        if (uri != null) {
-            return viewStats.stream()
-                    .map(view -> filterByUri(view, uri))
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-        } else {
-            return viewStats;
-        }
+        return convertStatsToDtoList(statsList);
     }
 
-    public ViewStats filterByUri(ViewStats viewStats, String[] uris) {
-        for (String uri : uris) {
-            if (viewStats.getUri().equals(uri)) {
-                return viewStats;
-            }
-        }
-        return null;
+    private List<ViewStatsDto> convertStatsToDtoList(List<ViewStats> viewStatsList) {
+        return viewStatsList.stream()
+                .map(StatsMapper::toViewStatsDto)
+                .collect(toList());
     }
 }

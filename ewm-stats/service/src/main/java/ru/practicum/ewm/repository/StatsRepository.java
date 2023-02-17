@@ -11,14 +11,31 @@ import ru.practicum.ewm.model.ViewStats;
 
 public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 
-    String QUERY_NOT_UNIQUE = "select distinct(e.uri) as uri, count(e.app) as hits, e.app as app "
-            + "from EndpointHit e where e.timestamp > ?1 and e.timestamp < ?2 "
-            + "group by e.app, (e.uri)";
-    String QUERY_UNIQUE = QUERY_NOT_UNIQUE + ", e.ip";
+    @Query("SELECT new ru.practicum.ewm.model.ViewStats(s.app, s.uri, COUNT(s.ip)) "
+            + " FROM EndpointHit s "
+            + " WHERE s.timestamp between ?1 and ?2 and s.uri in (?3) "
+            + " GROUP BY s.app, s.uri "
+            + " ORDER BY count(s.ip) DESC")
+    List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris);
 
-    @Query(value = QUERY_NOT_UNIQUE)
-    List<ViewStats> findAllNotUnique(LocalDateTime start, LocalDateTime end);
+    @Query("SELECT new ru.practicum.ewm.model.ViewStats(s.app, s.uri, COUNT(s.ip)) "
+            + " FROM EndpointHit s "
+            + " WHERE s.timestamp between ?1 and ?2 "
+            + " GROUP BY s.app, s.uri "
+            + " ORDER BY count(s.ip) DESC")
+    List<ViewStats> getStatsWithEmptyUris(LocalDateTime start, LocalDateTime end);
 
-    @Query(value = QUERY_UNIQUE)
-    List<ViewStats> findAllUnique(LocalDateTime start, LocalDateTime end);
+    @Query("SELECT new ru.practicum.ewm.model.ViewStats(s.app, s.uri, COUNT(distinct s.ip)) "
+            + " FROM EndpointHit s "
+            + " WHERE s.timestamp between ?1 and ?2 and s.uri in (?3) "
+            + " GROUP BY s.app, s.uri"
+            + " ORDER BY count(distinct s.ip) DESC")
+    List<ViewStats> getUniqueStats(LocalDateTime start, LocalDateTime end, List<String> uris);
+
+    @Query("SELECT new ru.practicum.ewm.model.ViewStats(s.app, s.uri, COUNT(distinct s.ip)) "
+            + " FROM EndpointHit s "
+            + " WHERE s.timestamp between ?1 and ?2 "
+            + " GROUP BY s.app, s.uri"
+            + " ORDER BY count(distinct s.ip) DESC")
+    List<ViewStats> getUniqueStatsWithEmptyUris(LocalDateTime start, LocalDateTime end);
 }

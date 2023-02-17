@@ -1,52 +1,67 @@
 package ru.practicum.ewm;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 public class BaseClient {
+
     protected final RestTemplate rest;
 
     public BaseClient(RestTemplate rest) {
         this.rest = rest;
     }
 
-    protected <T> void post(String path, T body) {
-        makeAndSendRequest(path, body);
+    protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters) {
+        return makeAndSendRequest(HttpMethod.GET, path, parameters, null);
     }
 
-    private <T> void makeAndSendRequest(String path, @Nullable T body) {
-        HttpEntity<T> requestEntity = null;
-        ResponseEntity<Object> response;
+    protected <T> ResponseEntity<Object> post(String path, T body) {
+        return makeAndSendRequest(HttpMethod.POST, path, null, body);
+    }
 
-        if (body != null) {
-            requestEntity = new HttpEntity<>(body);
-        }
+    private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, @Nullable Map<String, Object> parameters, @Nullable T body) {
+        HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders());
 
+        ResponseEntity<Object> endpointHitServiceResponse;
         try {
-            response = rest.exchange(path, HttpMethod.POST, requestEntity, Object.class);
+            if (parameters != null) {
+                endpointHitServiceResponse = rest.exchange(path, method, requestEntity, Object.class, parameters);
+            } else {
+                endpointHitServiceResponse = rest.exchange(path, method, requestEntity, Object.class);
+            }
         } catch (HttpStatusCodeException e) {
-            ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
-            return;
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
         }
-
-        prepareGatewayResponse(response);
+        return prepareGatewayResponse(endpointHitServiceResponse);
     }
 
-    private static void prepareGatewayResponse(ResponseEntity<Object> response) {
+    private HttpHeaders defaultHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        return headers;
+    }
+
+    private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
         if (response.getStatusCode().is2xxSuccessful()) {
-            return;
+            return response;
         }
 
         ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(response.getStatusCode());
+
         if (response.hasBody()) {
-            responseBuilder.body(response.getBody());
-            return;
+            return responseBuilder.body(response.getBody());
         }
 
-        responseBuilder.build();
+        return responseBuilder.build();
     }
 }
