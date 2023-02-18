@@ -55,7 +55,7 @@ public class StatsService {
 
     private List<ViewStatsDto> convertStatsToDtoList(List<ViewStats> viewStatsList) {
         return viewStatsList.stream()
-                .map(StatsMapper::toViewStatsDto)
+                .map(mapper::toViewStatsDto)
                 .collect(toList());
     }
 }

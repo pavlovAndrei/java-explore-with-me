@@ -20,7 +20,7 @@ public class StatsMapper {
                 .build();
     }
 
-    public static ViewStatsDto toViewStatsDto(ViewStats viewStats) {
+    public ViewStatsDto toViewStatsDto(ViewStats viewStats) {
         return ViewStatsDto.builder()
                 .app(viewStats.getApp().getApp())
                 .uri(viewStats.getUri())
