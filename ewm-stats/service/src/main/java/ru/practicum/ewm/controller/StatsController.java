@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,10 +31,8 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStatsDto> getStat(@RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                              LocalDateTime start,
-                                      @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                              LocalDateTime end,
+    public List<ViewStatsDto> getStat(@RequestParam("start") LocalDateTime start,
+                                      @RequestParam("end") LocalDateTime end,
                                       @RequestParam(value = "uris", required = false,
                                               defaultValue = "") List<String> uris,
                                       @RequestParam(value = "unique", defaultValue = "false") boolean unique) {
