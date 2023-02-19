@@ -35,7 +35,6 @@ public class UserAdminService {
     private final UserMapper mapper;
     private final UserRepository repository;
 
-
     public List<UserDto> getUsers(Long[] ids, Integer from, Integer size) {
         log.debug("Requested the list of Users with parameters: from={} and size={}.", from, size);
 
