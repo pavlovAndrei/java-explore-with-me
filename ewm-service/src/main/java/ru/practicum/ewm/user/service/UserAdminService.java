@@ -1,13 +1,11 @@
 package ru.practicum.ewm.user.service;
 
 import java.util.List;
-import java.util.Locale;
 
-import static java.util.Locale.ENGLISH;
+import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 
-import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
@@ -25,16 +23,15 @@ import ru.practicum.ewm.exception.model.ConflictException;
 import ru.practicum.ewm.exception.model.NotFoundException;
 import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.mapper.UserMapper;
+import ru.practicum.ewm.user.model.QUser;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
-import ru.practicum.ewm.user.model.QUser;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserAdminServiceImpl {
+public class UserAdminService {
 
-    private final MessageSource messageSource;
     private final UserMapper mapper;
     private final UserRepository repository;
 
@@ -67,11 +64,10 @@ public class UserAdminServiceImpl {
         try {
             userToCreate = repository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new ConflictException(messageSource.getMessage("Provided user with email: {} is a duplicate.",
-                    new String[]{user.getEmail()}, null));
+            throw new ConflictException(format("Provided user with email: '%s' is a duplicate.", user.getName()));
         }
 
-        log.debug("User with ID: {} is saved.", userToCreate.getId());
+        log.debug("User with ID: {} is added.", userToCreate.getId());
         return mapper.toUserDto(userToCreate);
     }
 
@@ -81,8 +77,7 @@ public class UserAdminServiceImpl {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException(messageSource.getMessage("User with id: {} is not found.",
-                    new Long[]{id}, null));
+            throw new NotFoundException(format("User with id: '%d' is not found.", id));
         }
 
         log.debug("User with ID: {} is removed.", id);

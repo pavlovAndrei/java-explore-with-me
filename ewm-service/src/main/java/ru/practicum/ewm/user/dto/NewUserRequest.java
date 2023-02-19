@@ -8,17 +8,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 @Valid
+@AllArgsConstructor
 public class NewUserRequest {
 
     private Long id;
 
-    @Email(message = "{email.user.not_valid}")
-    @NotBlank(message = "{email.user.not_blank}")
+    @Email(message = "User's email should be valid.")
+    @NotBlank(message = "User's email shouldn't be empty.")
     private String email;
 
-    @NotBlank(message = "{name.user.not_blank}")
+    @NotBlank(message = "User's name shouldn't be empty.")
     private String name;
-
 }
