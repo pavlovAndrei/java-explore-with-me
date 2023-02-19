@@ -4,7 +4,6 @@ services:
     build: ./ewm-stats/service
     image: stats_service_image
     container_name: stats-server
-
     ports:
       - "9090:9090"
     depends_on:
@@ -16,7 +15,7 @@ services:
 
   stats-db:
     image: postgres:14-alpine
-    container_name: ewm-db-postgress
+    container_name: stats-db-postgress
     restart: always
     ports:
       - "6542:5432"
@@ -29,7 +28,6 @@ services:
     build: ./ewm-service
     image: ewm_service_image
     container_name: ewm-service
-
     ports:
       - "8080:8080"
     depends_on:
@@ -42,7 +40,8 @@ services:
 
   ewm-db:
     image: postgres:14-alpine
-    container_name: ewm-db
+    container_name: ewm-db-postgress
+    restart: always
     ports:
       - "6541:5432"
     environment:
