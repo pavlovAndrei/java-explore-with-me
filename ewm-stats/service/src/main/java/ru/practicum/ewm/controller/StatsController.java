@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,7 @@ public class StatsController {
     private final StatsService statsServiceImpl;
 
     @PostMapping("/hit")
+    @ResponseStatus(CREATED)
     public void add(@Valid @RequestBody EndpointHitPost endpointHitDto) {
         log.info("POST /hit the next object: dto={},", endpointHitDto);
         statsServiceImpl.addStat(endpointHitDto);
