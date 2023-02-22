@@ -27,15 +27,15 @@ public class CategoryPublicController {
     private final CategoryPublicService categoryPublicService;
 
     @GetMapping
-    public List<CategoryDto> getCategories(@PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                           @Positive @RequestParam(defaultValue = "10") Integer size) {
+    public List<CategoryDto> findAll(@PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                     @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.debug("Received the request to get categories");
-        return categoryPublicService.getCategories(from, size);
+        return categoryPublicService.findAll(from, size);
     }
 
     @GetMapping("/{catId}")
-    public CategoryDto getCategoryById(@PathVariable @PositiveOrZero Long catId) {
+    public CategoryDto getById(@PathVariable @PositiveOrZero Long catId) {
         log.debug("Received the request to get category with id: {}", catId);
-        return categoryPublicService.getCategoryById(catId);
+        return categoryPublicService.getById(catId);
     }
 }

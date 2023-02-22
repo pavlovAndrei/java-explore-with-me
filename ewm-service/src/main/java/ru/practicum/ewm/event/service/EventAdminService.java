@@ -54,9 +54,9 @@ public class EventAdminService {
             REJECT_EVENT, this::setEventStatusCanceled
     );
 
-    public List<EventFullDto> getEvents(Long[] users, EventState[] states, Long[] categories,
-                                        LocalDateTime start, LocalDateTime end,
-                                        Integer from, Integer size) {
+    public List<EventFullDto> findAll(Long[] users, EventState[] states, Long[] categories,
+                                      LocalDateTime start, LocalDateTime end,
+                                      Integer from, Integer size) {
         log.debug("Get the list of Events with parameters: from={} and size={}.", from, size);
         Pageable page = CustomPageRequest.of(from, size, ASC, "id");
 
@@ -92,7 +92,7 @@ public class EventAdminService {
     }
 
 
-    public EventFullDto updateEvent(Long eventId, UpdateEventAdminRequest adminRequest) {
+    public EventFullDto update(Long eventId, UpdateEventAdminRequest adminRequest) {
         log.debug("Update event with ID: {}.", eventId);
 
         if (nonNull(adminRequest.getEventDate())) {

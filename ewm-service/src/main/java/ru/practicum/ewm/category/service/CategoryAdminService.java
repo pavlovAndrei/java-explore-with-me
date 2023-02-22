@@ -23,7 +23,7 @@ public class CategoryAdminService {
     private final CategoryMapper mapper;
     private final CategoryRepository repository;
 
-    public CategoryDto createCategory(Category category) {
+    public CategoryDto create(Category category) {
         log.debug("Add Category with name={}.", category.getName());
         Category categoryToCreate;
 
@@ -37,7 +37,7 @@ public class CategoryAdminService {
         return mapper.toCategoryDto(categoryToCreate);
     }
 
-    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
+    public CategoryDto update(Long id, CategoryDto categoryDto) {
         log.debug("Update category with ID: {}.", id);
         Category updatedCategory;
 
@@ -56,7 +56,7 @@ public class CategoryAdminService {
         return mapper.toCategoryDto(updatedCategory);
     }
 
-    public void deleteCategory(Long id) {
+    public void delete(Long id) {
         log.debug("Delete category with ID: {}.", id);
 
         try {

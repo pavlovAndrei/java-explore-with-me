@@ -34,22 +34,22 @@ public class CompilationAdminController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public CompilationDto createCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
+    public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         log.debug("Received the request to create Compilation with title: {}", newCompilationDto.getTitle());
-        return compilationAdminService.createCompilation(newCompilationDto);
+        return compilationAdminService.create(newCompilationDto);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(NO_CONTENT)
-    public void deleteCompilation(@Positive @PathVariable Long compId) {
+    public void delete(@Positive @PathVariable Long compId) {
         log.debug("Received the request to remove Compilation with ID: {}", compId);
-        compilationAdminService.deleteCompilation(compId);
+        compilationAdminService.delete(compId);
     }
 
     @PatchMapping("/{compId}")
-    public CompilationDto updateCompilation(@Positive @PathVariable Long compId,
-                                            @RequestBody UpdateCompilationRequest request) {
+    public CompilationDto update(@Positive @PathVariable Long compId,
+                                 @RequestBody UpdateCompilationRequest request) {
         log.debug("Received the request to update Compilation with ID: {}", compId);
-        return compilationAdminService.updateCompilation(compId, request);
+        return compilationAdminService.update(compId, request);
     }
 }

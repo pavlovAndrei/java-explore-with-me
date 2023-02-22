@@ -38,9 +38,9 @@ public class EventPublicService {
     private final EventRepository eventRepository;
 
 
-    public List<EventShortDto> getEvents(String text, Long[] categories, Boolean paid, LocalDateTime start,
-                                         LocalDateTime end, Boolean onlyAvailable, EventSearchSort searchSort,
-                                         Integer from, Integer size) {
+    public List<EventShortDto> findAll(String text, Long[] categories, Boolean paid, LocalDateTime start,
+                                       LocalDateTime end, Boolean onlyAvailable, EventSearchSort searchSort,
+                                       Integer from, Integer size) {
         log.debug("Get the list of Events with parameters: from={} and size={}.", from, size);
 
         var expression = buildExpression(text, categories, paid, start, end);
@@ -71,7 +71,7 @@ public class EventPublicService {
         return foundEvents;
     }
 
-    public EventFullDto getEventById(Long eventId) {
+    public EventFullDto getById(Long eventId) {
         log.debug("Get Event by ID: {}.", eventId);
 
         Event foundEvent = eventRepository.findEventByIdAndState(eventId, PUBLISHED)

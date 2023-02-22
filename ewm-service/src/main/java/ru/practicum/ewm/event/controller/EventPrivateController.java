@@ -40,39 +40,39 @@ public class EventPrivateController {
     private final EventPrivateService eventPrivateService;
 
     @GetMapping
-    public List<EventShortDto> getEvents(@PathVariable Long userId,
-                                         @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                         @Positive @RequestParam(defaultValue = "10") Integer size) {
+    public List<EventShortDto> findAllByUserId(@PathVariable Long userId,
+                                               @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                               @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.debug("Received the request to get events.");
-        return eventPrivateService.getEvents(userId, from, size);
+        return eventPrivateService.findAllByUserId(userId, from, size);
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public EventFullDto createEvent(@PathVariable Long userId,
-                                    @Valid @RequestBody NewEventDto newEventDto) {
+    public EventFullDto create(@PathVariable Long userId,
+                               @Valid @RequestBody NewEventDto newEventDto) {
         log.debug("Received the request to create Event with title: {}", newEventDto.getTitle());
-        return eventPrivateService.createEvent(userId, newEventDto);
+        return eventPrivateService.create(userId, newEventDto);
     }
 
     @GetMapping("/{eventId}")
-    public EventFullDto getEventById(@PathVariable Long userId,
-                                     @PathVariable Long eventId) {
+    public EventFullDto getById(@PathVariable Long userId,
+                                @PathVariable Long eventId) {
         log.debug("Received the request to get Event by ID: {}", eventId);
-        return eventPrivateService.getEventById(userId, eventId);
+        return eventPrivateService.getById(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")
-    public EventFullDto updateEvent(@PathVariable Long userId,
-                                    @PathVariable Long eventId,
-                                    @Valid @RequestBody UpdateEventUserRequest request) {
+    public EventFullDto update(@PathVariable Long userId,
+                               @PathVariable Long eventId,
+                               @Valid @RequestBody UpdateEventUserRequest request) {
         log.debug("Received the request to update Event with id: {}", eventId);
-        return eventPrivateService.updateEvent(userId, eventId, request);
+        return eventPrivateService.update(userId, eventId, request);
     }
 
     @GetMapping("/{eventId}/requests")
-    public List<ParticipantRequestDto> getRequests(@PathVariable Long userId,
-                                                   @PathVariable Long eventId) {
+    public List<ParticipantRequestDto> findAllRequests(@PathVariable Long userId,
+                                                       @PathVariable Long eventId) {
         log.debug("Received the request to get requests for event with id: {}", eventId);
         return eventPrivateService.getRequests(userId, eventId);
     }

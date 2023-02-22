@@ -27,16 +27,16 @@ public class CompilationPublicController {
     private final CompilationPublicService compilationPublicService;
 
     @GetMapping
-    public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
-                                                @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                                @Positive @RequestParam(defaultValue = "10") Integer size) {
+    public List<CompilationDto> findAll(@RequestParam(required = false) Boolean pinned,
+                                        @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                        @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.debug("Received the request to get compilations.");
-        return compilationPublicService.getCompilations(pinned, from, size);
+        return compilationPublicService.findAll(pinned, from, size);
     }
 
     @GetMapping("/{compId}")
-    public CompilationDto getCompilationById(@PathVariable @PositiveOrZero Long compId) {
+    public CompilationDto getById(@PathVariable @PositiveOrZero Long compId) {
         log.debug("Received the request to update Compilation with id: {}", compId);
-        return compilationPublicService.getCompilationById(compId);
+        return compilationPublicService.getById(compId);
     }
 }

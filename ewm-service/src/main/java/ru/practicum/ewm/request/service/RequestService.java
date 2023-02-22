@@ -38,7 +38,7 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
 
-    public List<ParticipantRequestDto> getRequests(Long userId) {
+    public List<ParticipantRequestDto> findAllByUserId(Long userId) {
         log.debug("Get the list of Requests for user with ID: {}.", userId);
 
         var foundRequests = requestRepository.findRequestByRequesterId(userId);
@@ -50,7 +50,7 @@ public class RequestService {
     }
 
     @Transactional
-    public ParticipantRequestDto createRequest(Long userId, Long eventId) {
+    public ParticipantRequestDto create(Long userId, Long eventId) {
         log.debug("Add request for event with id: {} by user with id: {}.", eventId, userId);
         verifyUserExists(userId);
 
@@ -75,7 +75,7 @@ public class RequestService {
     }
 
     @Transactional
-    public ParticipantRequestDto cancelRequest(Long userId, Long requestId) {
+    public ParticipantRequestDto cancel(Long userId, Long requestId) {
         log.debug("Cancel request with id: {} by user with id: {}.", requestId, userId);
         verifyUserExists(userId);
 

@@ -32,7 +32,7 @@ public class CompilationAdminService {
     private final CompilationRepository compRepository;
     private final EventRepository eventRepository;
 
-    public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
+    public CompilationDto create(NewCompilationDto newCompilationDto) {
         log.debug("Add compilation with title: {}.", newCompilationDto.getTitle());
 
         Compilation createdCompilation;
@@ -47,7 +47,7 @@ public class CompilationAdminService {
         return mapper.toCompilationDto(createdCompilation);
     }
 
-    public void deleteCompilation(Long compId) {
+    public void delete(Long compId) {
         log.debug("Delete compilation with id: {}.", compId);
 
         try {
@@ -59,7 +59,7 @@ public class CompilationAdminService {
         log.debug("Compilation with id: {} is removed.", compId);
     }
 
-    public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest request) {
+    public CompilationDto update(Long compId, UpdateCompilationRequest request) {
         log.debug("Update compilation with ID: {}.", compId);
 
         Compilation savedCompilation = compRepository.findById(compId)

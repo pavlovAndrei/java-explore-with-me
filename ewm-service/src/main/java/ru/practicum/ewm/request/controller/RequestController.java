@@ -29,23 +29,23 @@ public class RequestController {
     private final RequestService requestService;
 
     @GetMapping
-    public List<ParticipantRequestDto> getRequests(@PathVariable Long userId) {
+    public List<ParticipantRequestDto> findAllByUserId(@PathVariable Long userId) {
         log.debug("Received the request to get Requests for user with ID: {}", userId);
-        return requestService.getRequests(userId);
+        return requestService.findAllByUserId(userId);
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public ParticipantRequestDto createRequest(@PathVariable Long userId,
-                                               @RequestParam Long eventId) {
+    public ParticipantRequestDto create(@PathVariable Long userId,
+                                        @RequestParam Long eventId) {
         log.debug("Received the request to create Request for event with ID: {} by user with ID: {}", eventId, userId);
-        return requestService.createRequest(userId, eventId);
+        return requestService.create(userId, eventId);
     }
 
     @PatchMapping("/{requestId}/cancel")
-    public ParticipantRequestDto cancelRequest(@PathVariable Long userId,
-                                               @PathVariable Long requestId) {
+    public ParticipantRequestDto cancel(@PathVariable Long userId,
+                                        @PathVariable Long requestId) {
         log.debug("Received the request to cancel Request with ID: {} by user with ID: {}", requestId, userId);
-        return requestService.cancelRequest(userId, requestId);
+        return requestService.cancel(userId, requestId);
     }
 }

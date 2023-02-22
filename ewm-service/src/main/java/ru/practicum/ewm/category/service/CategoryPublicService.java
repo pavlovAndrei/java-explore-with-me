@@ -26,7 +26,7 @@ public class CategoryPublicService {
     private final CategoryMapper mapper;
     private final CategoryRepository repository;
 
-    public List<CategoryDto> getCategories(Integer from, Integer size) {
+    public List<CategoryDto> findAll(Integer from, Integer size) {
         log.debug("Get the list of Categories with parameters: from={} and size={}.", from, size);
 
         Pageable page = CustomPageRequest.of(from, size, Sort.Direction.ASC, "id");
@@ -38,7 +38,7 @@ public class CategoryPublicService {
                 .collect(toList());
     }
 
-    public CategoryDto getCategoryById(Long catId) {
+    public CategoryDto getById(Long catId) {
         log.debug("Get Category with id: {}.", catId);
 
         Category foundCategory = repository.findById(catId)

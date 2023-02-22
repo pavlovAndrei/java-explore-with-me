@@ -35,22 +35,22 @@ public class CategoryAdminController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryDto) {
+    public CategoryDto create(@Valid @RequestBody CategoryDto categoryDto) {
         log.debug("Received the request to create Category with name: {}", categoryDto.getName());
-        return categoryAdminService.createCategory(categoryMapper.toCategory(categoryDto));
+        return categoryAdminService.create(categoryMapper.toCategory(categoryDto));
     }
 
     @PatchMapping("/{catId}")
-    public CategoryDto updateCategory(@Positive @PathVariable Long catId,
-                                      @RequestBody @NotNull @Valid CategoryDto categoryDto) {
+    public CategoryDto update(@Positive @PathVariable Long catId,
+                              @RequestBody @NotNull @Valid CategoryDto categoryDto) {
         log.debug("Received the request to update Category with id: {}", catId);
-        return categoryAdminService.updateCategory(catId, categoryDto);
+        return categoryAdminService.update(catId, categoryDto);
     }
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(NO_CONTENT)
-    public void deleteCategory(@Positive @PathVariable Long catId) {
+    public void delete(@Positive @PathVariable Long catId) {
         log.debug("Received the request to delete Category with id: {}", catId);
-        categoryAdminService.deleteCategory(catId);
+        categoryAdminService.delete(catId);
     }
 }

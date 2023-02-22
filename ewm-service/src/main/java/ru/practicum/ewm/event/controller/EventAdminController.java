@@ -33,21 +33,21 @@ public class EventAdminController {
     private final EventAdminService eventAdminService;
 
     @GetMapping
-    public List<EventFullDto> getEvents(@RequestParam(required = false) Long[] users,
-                                        @RequestParam(required = false) EventState[] states,
-                                        @RequestParam(required = false) Long[] categories,
-                                        @RequestParam(required = false) LocalDateTime rangeStart,
-                                        @RequestParam(required = false) LocalDateTime rangeEnd,
-                                        @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                        @Positive @RequestParam(defaultValue = "10") Integer size) {
+    public List<EventFullDto> findAll(@RequestParam(required = false) Long[] users,
+                                      @RequestParam(required = false) EventState[] states,
+                                      @RequestParam(required = false) Long[] categories,
+                                      @RequestParam(required = false) LocalDateTime rangeStart,
+                                      @RequestParam(required = false) LocalDateTime rangeEnd,
+                                      @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                      @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.debug("Received the request to get events.");
-        return eventAdminService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+        return eventAdminService.findAll(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @PatchMapping("/{eventId}")
-    public EventFullDto updateEvent(@PathVariable Long eventId,
-                                    @Valid @RequestBody UpdateEventAdminRequest updateEvent) {
+    public EventFullDto update(@PathVariable Long eventId,
+                               @Valid @RequestBody UpdateEventAdminRequest updateEvent) {
         log.debug("Received the request to update Event with id: {}", eventId);
-        return eventAdminService.updateEvent(eventId, updateEvent);
+        return eventAdminService.update(eventId, updateEvent);
     }
 }

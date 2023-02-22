@@ -29,19 +29,19 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(CREATED)
-    public void add(@Valid @RequestBody EndpointHitPost endpointHitDto) {
+    public void create(@Valid @RequestBody EndpointHitPost endpointHitDto) {
         log.info("POST /hit the next object: dto={},", endpointHitDto);
-        statsServiceImpl.addStat(endpointHitDto);
+        statsServiceImpl.create(endpointHitDto);
     }
 
     @GetMapping("/stats")
-    public List<ViewStatsDto> getStat(@RequestParam("start") LocalDateTime start,
+    public List<ViewStatsDto> findAll(@RequestParam("start") LocalDateTime start,
                                       @RequestParam("end") LocalDateTime end,
                                       @RequestParam(value = "uris", required = false,
                                               defaultValue = "") List<String> uris,
                                       @RequestParam(value = "unique", defaultValue = "false") boolean unique) {
         log.info("GET statistic with params: start = {}, end = {}, "
                 + "uris = {}, unique = {}", start, end, uris, unique);
-        return statsServiceImpl.getStat(start, end, uris, unique);
+        return statsServiceImpl.findAll(start, end, uris, unique);
     }
 }

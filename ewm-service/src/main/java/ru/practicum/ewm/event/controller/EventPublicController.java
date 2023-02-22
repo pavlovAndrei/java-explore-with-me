@@ -36,29 +36,29 @@ public class EventPublicController {
     private final EventPublicService eventPublicService;
 
     @GetMapping
-    public List<EventShortDto> getEvents(@RequestParam(required = false) String text,
-                                         @RequestParam(required = false) Long[] categories,
-                                         @RequestParam(required = false) Boolean paid,
-                                         @RequestParam(required = false) LocalDateTime rangeStart,
-                                         @RequestParam(required = false) LocalDateTime rangeEnd,
-                                         @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
-                                         @RequestParam(required = false, defaultValue = "EVENT_DATE") EventSearchSort sort,
-                                         @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                         @Positive @RequestParam(defaultValue = "10") Integer size,
-                                         HttpServletRequest request) {
+    public List<EventShortDto> findAll(@RequestParam(required = false) String text,
+                                       @RequestParam(required = false) Long[] categories,
+                                       @RequestParam(required = false) Boolean paid,
+                                       @RequestParam(required = false) LocalDateTime rangeStart,
+                                       @RequestParam(required = false) LocalDateTime rangeEnd,
+                                       @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
+                                       @RequestParam(required = false, defaultValue = "EVENT_DATE") EventSearchSort sort,
+                                       @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                       @Positive @RequestParam(defaultValue = "10") Integer size,
+                                       HttpServletRequest request) {
         log.debug("Received the request to get events.");
         endpointHitClient.postHit(buildEndpointHitPost(request));
 
-        return eventPublicService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+        return eventPublicService.findAll(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
 
     @GetMapping("/{eventId}")
-    public EventFullDto getEventById(@PathVariable Long eventId, HttpServletRequest request) {
+    public EventFullDto getById(@PathVariable Long eventId, HttpServletRequest request) {
         log.debug("Received the request to get Event with id: {}", eventId);
 
         endpointHitClient.postHit(buildEndpointHitPost(request));
 
-        return eventPublicService.getEventById(eventId);
+        return eventPublicService.getById(eventId);
     }
 
     private EndpointHitPost buildEndpointHitPost(HttpServletRequest request) {

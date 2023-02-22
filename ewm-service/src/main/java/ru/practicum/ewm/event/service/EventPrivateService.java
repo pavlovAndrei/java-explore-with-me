@@ -66,7 +66,7 @@ public class EventPrivateService {
             SEND_TO_REVIEW, event -> event.setState(EventState.PENDING),
             CANCEL_REVIEW, event -> event.setState(CANCELED));
 
-    public List<EventShortDto> getEvents(Long userId, Integer from, Integer size) {
+    public List<EventShortDto> findAllByUserId(Long userId, Integer from, Integer size) {
         log.debug("Get the list of Events with parameters: from={} and size={}.", from, size);
         verifyUserExists(userId);
 
@@ -79,7 +79,7 @@ public class EventPrivateService {
                 .collect(toList());
     }
 
-    public EventFullDto createEvent(Long userId, NewEventDto newEventDto) {
+    public EventFullDto create(Long userId, NewEventDto newEventDto) {
         log.debug("Add event with title: {}.", newEventDto.getTitle());
 
         verifyUserExists(userId);
@@ -98,7 +98,7 @@ public class EventPrivateService {
         return eventMapper.toEventFullDto(eventToCreate);
     }
 
-    public EventFullDto getEventById(Long userId, Long eventId) {
+    public EventFullDto getById(Long userId, Long eventId) {
         log.debug("Get Event by ID: {} for user with ID: {}.", eventId, userId);
         verifyUserExists(userId);
 
@@ -108,7 +108,7 @@ public class EventPrivateService {
         return eventMapper.toEventFullDto(foundEvent);
     }
 
-    public EventFullDto updateEvent(Long userId, Long eventId, UpdateEventUserRequest request) {
+    public EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest request) {
         log.debug("Update event with ID: {}.", eventId);
         verifyUserExists(userId);
 

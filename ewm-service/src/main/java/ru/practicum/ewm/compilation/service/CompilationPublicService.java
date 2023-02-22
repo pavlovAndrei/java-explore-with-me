@@ -32,7 +32,7 @@ public class CompilationPublicService {
     private final CompilationMapper mapper;
     private final CompilationRepository compilationRepository;
 
-    public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
+    public List<CompilationDto> findAll(Boolean pinned, Integer from, Integer size) {
         log.debug("Get the list of Compilations with parameters: from={} and size={}.", from, size);
         Pageable page = CustomPageRequest.of(from, size, ASC, "id");
 
@@ -52,7 +52,7 @@ public class CompilationPublicService {
     }
 
 
-    public CompilationDto getCompilationById(Long compId) {
+    public CompilationDto getById(Long compId) {
         log.debug("Get compilation with ID: {}.", compId);
 
         Compilation foundCompilation = compilationRepository.findById(compId)
