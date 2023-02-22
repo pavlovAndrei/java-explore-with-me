@@ -9,4 +9,5 @@ import ru.practicum.ewm.compilation.model.Compilation;
 @Repository
 public interface CompilationRepository extends JpaRepository<Compilation, Long>, QuerydslPredicateExecutor<Compilation> {
 
+    Boolean existsCompilationByTitle(String title);
 }

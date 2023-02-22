@@ -7,7 +7,6 @@ import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -35,13 +34,11 @@ public class CompilationAdminService {
     public CompilationDto create(NewCompilationDto newCompilationDto) {
         log.debug("Add compilation with title: {}.", newCompilationDto.getTitle());
 
-        Compilation createdCompilation;
-        try {
-            createdCompilation = compRepository.save(buildNewCompilation(newCompilationDto));
-        } catch (DataIntegrityViolationException e) {
+        if (compRepository.existsCompilationByTitle(newCompilationDto.getTitle())) {
             throw new ConflictException(format("Provided compilation with title: '%s' is a duplicate.",
                     newCompilationDto.getTitle()));
         }
+        Compilation createdCompilation = compRepository.save(buildNewCompilation(newCompilationDto));
 
         log.debug("Compilation with ID: {} is added.", createdCompilation.getId());
         return mapper.toCompilationDto(createdCompilation);
@@ -50,11 +47,10 @@ public class CompilationAdminService {
     public void delete(Long compId) {
         log.debug("Delete compilation with id: {}.", compId);
 
-        try {
-            compRepository.deleteById(compId);
-        } catch (EmptyResultDataAccessException e) {
+        if (!compRepository.existsById(compId)) {
             throw new NotFoundException(format("Compilation with ID: '%d' is not found", compId));
         }
+        compRepository.deleteById(compId);
 
         log.debug("Compilation with id: {} is removed.", compId);
     }
@@ -66,11 +62,11 @@ public class CompilationAdminService {
                 .orElseThrow(() -> new NotFoundException(format("Compilation with ID: '%d' is not found", compId)));
 
         Compilation updatedCompilation;
-        try {
-            updatedCompilation = compRepository.save(buildCompilationUpdate(request, savedCompilation));
-        } catch (DataIntegrityViolationException e) {
-            throw new ConflictException(format("Provided compilation with ID: '%d' is a duplicate.", compId));
+        if (compRepository.existsCompilationByTitle(request.getTitle())) {
+            throw new ConflictException(format("Provided compilation with title: '%s' is a duplicate.",
+                    request.getTitle()));
         }
+        updatedCompilation = compRepository.save(buildCompilationUpdate(request, savedCompilation));
 
         log.debug("Compilation with ID: {} is updated.", compId);
         return mapper.toCompilationDto(updatedCompilation);

@@ -10,7 +10,6 @@ import static java.time.LocalDateTime.now;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -103,11 +102,11 @@ public class EventAdminService {
                 .orElseThrow(() -> new NotFoundException(format("Event with id: '%d' is not found", eventId)));
 
         Event updatedEvent;
-        try {
-            updatedEvent = eventRepository.save(buildEventFromUpdateRequest(adminRequest, eventToSave));
-        } catch (DataIntegrityViolationException e) {
-            throw new ConflictException("Provided title  is a duplicate.");
+
+        if (eventRepository.existsEventByTitle(adminRequest.getTitle())) {
+            throw new ConflictException("Provided title is a duplicate.");
         }
+        updatedEvent = eventRepository.save(buildEventFromUpdateRequest(adminRequest, eventToSave));
 
         log.debug("Event with ID: {} is updated.", eventId);
         return eventMapper.toEventFullDto(updatedEvent);

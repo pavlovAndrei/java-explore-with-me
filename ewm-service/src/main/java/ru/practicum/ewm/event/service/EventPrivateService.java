@@ -11,7 +11,6 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -88,11 +87,10 @@ public class EventPrivateService {
         Event event = buildNewEvent(userId, newEventDto);
         Event eventToCreate;
 
-        try {
-            eventToCreate = eventRepository.save(event);
-        } catch (DataIntegrityViolationException e) {
-            throw new ConflictException(format("Provided event with title: '%s' is a duplicate.", newEventDto.getTitle()));
+        if (eventRepository.existsEventByTitle(newEventDto.getTitle())) {
+            throw new ConflictException("Provided title is a duplicate.");
         }
+        eventToCreate = eventRepository.save(event);
 
         log.debug("Event with ID: {} is added.", eventToCreate.getId());
         return eventMapper.toEventFullDto(eventToCreate);
@@ -128,12 +126,11 @@ public class EventPrivateService {
         }
 
         Event updatedEvent;
-        try {
-            updatedEvent = eventRepository.save(buildEventForUpdate(request, eventFromRepo));
-        } catch (DataIntegrityViolationException e) {
+        if (eventRepository.existsEventByTitle(request.getTitle())) {
             throw new ConflictException(format("Provided event with title: '%s' is a duplicate.", request.getTitle()));
         }
 
+        updatedEvent = eventRepository.save(buildEventForUpdate(request, eventFromRepo));
         log.debug("Event with ID: {} is updated.", eventId);
         return eventMapper.toEventFullDto(updatedEvent);
     }
