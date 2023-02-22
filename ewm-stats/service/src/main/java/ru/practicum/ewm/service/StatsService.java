@@ -27,13 +27,13 @@ public class StatsService {
     private final StatsRepository statsRepository;
 
     @Transactional
-    public void addStat(EndpointHitPost statsDto) {
+    public void create(EndpointHitPost statsDto) {
         App app = appService.findByApp(statsDto.getApp());
         EndpointHit endpointHit = mapper.toEndpointHit(statsDto, app);
         statsRepository.save(endpointHit);
     }
 
-    public List<ViewStatsDto> getStat(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+    public List<ViewStatsDto> findAll(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         List<ViewStats> statsList;
 
         if (unique) {
