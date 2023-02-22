@@ -70,6 +70,7 @@ public class UserAdminService {
         return mapper.toUserDto(userToCreate);
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         log.debug("Delete user with ID: {}.", id);
 

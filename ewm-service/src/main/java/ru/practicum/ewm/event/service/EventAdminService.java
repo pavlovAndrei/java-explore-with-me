@@ -12,6 +12,7 @@ import static java.util.stream.Collectors.toList;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 
@@ -90,7 +91,7 @@ public class EventAdminService {
                 .collect(toList());
     }
 
-
+    @Transactional
     public EventFullDto update(Long eventId, UpdateEventAdminRequest adminRequest) {
         log.debug("Update event with ID: {}.", eventId);
 

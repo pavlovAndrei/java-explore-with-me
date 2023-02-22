@@ -8,6 +8,7 @@ import static java.util.Objects.nonNull;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ public class CompilationAdminService {
     private final CompilationRepository compRepository;
     private final EventRepository eventRepository;
 
+    @Transactional
     public CompilationDto create(NewCompilationDto newCompilationDto) {
         log.debug("Add compilation with title: {}.", newCompilationDto.getTitle());
 
@@ -44,6 +46,7 @@ public class CompilationAdminService {
         return mapper.toCompilationDto(createdCompilation);
     }
 
+    @Transactional
     public void delete(Long compId) {
         log.debug("Delete compilation with id: {}.", compId);
 
@@ -55,6 +58,7 @@ public class CompilationAdminService {
         log.debug("Compilation with id: {} is removed.", compId);
     }
 
+    @Transactional
     public CompilationDto update(Long compId, UpdateCompilationRequest request) {
         log.debug("Update compilation with ID: {}.", compId);
 

@@ -78,6 +78,7 @@ public class EventPrivateService {
                 .collect(toList());
     }
 
+    @Transactional
     public EventFullDto create(Long userId, NewEventDto newEventDto) {
         log.debug("Add event with title: {}.", newEventDto.getTitle());
 
@@ -106,6 +107,7 @@ public class EventPrivateService {
         return eventMapper.toEventFullDto(foundEvent);
     }
 
+    @Transactional
     public EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest request) {
         log.debug("Update event with ID: {}.", eventId);
         verifyUserExists(userId);

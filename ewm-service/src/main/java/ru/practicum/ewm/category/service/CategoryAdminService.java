@@ -3,6 +3,7 @@ package ru.practicum.ewm.category.service;
 import static java.lang.String.format;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class CategoryAdminService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
 
+    @Transactional
     public CategoryDto create(Category category) {
         log.debug("Add Category with name={}.", category.getName());
         Category categoryToCreate;
@@ -36,6 +38,7 @@ public class CategoryAdminService {
         return mapper.toCategoryDto(categoryToCreate);
     }
 
+    @Transactional
     public CategoryDto update(Long id, CategoryDto categoryDto) {
         log.debug("Update category with ID: {}.", id);
         Category updatedCategory;
@@ -52,6 +55,7 @@ public class CategoryAdminService {
         return mapper.toCategoryDto(updatedCategory);
     }
 
+    @Transactional
     public void delete(Long id) {
         log.debug("Delete category with ID: {}.", id);
 
