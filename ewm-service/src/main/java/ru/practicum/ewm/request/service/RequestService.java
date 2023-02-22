@@ -54,7 +54,7 @@ public class RequestService {
         log.debug("Add request for event with id: {} by user with id: {}.", eventId, userId);
         verifyUserExists(userId);
 
-        if (requestRepository.findRequestByRequesterIdAndEventId(userId, eventId).isPresent()) {
+        if (requestRepository.existsByRequesterIdAndEventId(userId, eventId)) {
             throw new ConflictException("Request can be sent only once.");
         }
 
@@ -62,7 +62,7 @@ public class RequestService {
             throw new NotFoundException(format("Event with id: '%d' is not found", eventId));
         }
 
-        if (eventRepository.findEventByInitiatorIdAndId(userId, eventId).isPresent()) {
+        if (eventRepository.existsByInitiatorIdAndId(userId, eventId)) {
             throw new ConflictException("Owner is not able to request participation.");
         }
 

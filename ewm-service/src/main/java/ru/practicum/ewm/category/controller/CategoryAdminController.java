@@ -2,7 +2,6 @@ package ru.practicum.ewm.category.controller;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +40,7 @@ public class CategoryAdminController {
     }
 
     @PatchMapping("/{catId}")
-    public CategoryDto update(@Positive @PathVariable Long catId,
+    public CategoryDto update(@PathVariable Long catId,
                               @RequestBody @NotNull @Valid CategoryDto categoryDto) {
         log.debug("Received the request to update Category with id: {}", catId);
         return categoryAdminService.update(catId, categoryDto);
@@ -49,7 +48,7 @@ public class CategoryAdminController {
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(NO_CONTENT)
-    public void delete(@Positive @PathVariable Long catId) {
+    public void delete(@PathVariable Long catId) {
         log.debug("Received the request to delete Category with id: {}", catId);
         categoryAdminService.delete(catId);
     }

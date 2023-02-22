@@ -1,7 +1,6 @@
 package ru.practicum.ewm.compilation.controller;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,13 +40,13 @@ public class CompilationAdminController {
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(NO_CONTENT)
-    public void delete(@Positive @PathVariable Long compId) {
+    public void delete(@PathVariable Long compId) {
         log.debug("Received the request to remove Compilation with ID: {}", compId);
         compilationAdminService.delete(compId);
     }
 
     @PatchMapping("/{compId}")
-    public CompilationDto update(@Positive @PathVariable Long compId,
+    public CompilationDto update(@PathVariable Long compId,
                                  @RequestBody UpdateCompilationRequest request) {
         log.debug("Received the request to update Compilation with ID: {}", compId);
         return compilationAdminService.update(compId, request);
