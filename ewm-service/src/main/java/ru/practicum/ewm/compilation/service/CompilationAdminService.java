@@ -6,7 +6,6 @@ import java.util.List;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
