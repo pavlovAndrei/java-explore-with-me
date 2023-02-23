@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.ewm.EndpointHitClient;
 import ru.practicum.ewm.EndpointHitPost;
-import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.EventWithCommentsDto;
 import ru.practicum.ewm.event.model.EventSearchSort;
