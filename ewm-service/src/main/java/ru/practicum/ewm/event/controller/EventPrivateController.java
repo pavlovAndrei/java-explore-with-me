@@ -25,6 +25,7 @@ import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.ewm.event.dto.EventRequestStatusUpdateResult;
 import ru.practicum.ewm.event.dto.EventShortDto;
+import ru.practicum.ewm.event.dto.EventWithCommentsDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
 import ru.practicum.ewm.event.dto.UpdateEventUserRequest;
 import ru.practicum.ewm.event.service.EventPrivateService;
@@ -56,8 +57,8 @@ public class EventPrivateController {
     }
 
     @GetMapping("/{eventId}")
-    public EventFullDto getById(@PathVariable Long userId,
-                                @PathVariable Long eventId) {
+    public EventWithCommentsDto getById(@PathVariable Long userId,
+                                        @PathVariable Long eventId) {
         log.debug("Received the request to get Event by ID: {}", eventId);
         return eventPrivateService.getById(userId, eventId);
     }

@@ -18,8 +18,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.ewm.common.CustomPageRequest;
-import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
+import ru.practicum.ewm.event.dto.EventWithCommentsDto;
 import ru.practicum.ewm.event.mapper.EventMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventSearchSort;
@@ -71,7 +71,7 @@ public class EventPublicService {
         return foundEvents;
     }
 
-    public EventFullDto getById(Long eventId) {
+    public EventWithCommentsDto getById(Long eventId) {
         log.debug("Get Event by ID: {}.", eventId);
 
         Event foundEvent = eventRepository.findEventByIdAndState(eventId, PUBLISHED)
@@ -80,7 +80,7 @@ public class EventPublicService {
         foundEvent.setViews(foundEvent.getViews() + 1);
         eventRepository.save(foundEvent);
 
-        return mapper.toEventFullDto(foundEvent);
+        return mapper.toEventWithComments(foundEvent);
     }
 
     private BooleanExpression buildExpression(String text, Long[] categories, Boolean paid,

@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
+import ru.practicum.ewm.event.dto.EventWithCommentsDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.user.model.User;
@@ -20,6 +21,8 @@ public interface EventMapper {
     EventShortDto toEventShortDto(Event event);
 
     EventFullDto toEventFullDto(Event event);
+
+    EventWithCommentsDto toEventWithComments(Event event);
 
     default Event toEvent(Long userId, NewEventDto newEventDto) {
         if (isNull(newEventDto)) {

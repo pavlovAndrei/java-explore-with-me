@@ -26,6 +26,7 @@ import ru.practicum.ewm.event.dto.EventRequestStatus;
 import ru.practicum.ewm.event.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.ewm.event.dto.EventRequestStatusUpdateResult;
 import ru.practicum.ewm.event.dto.EventShortDto;
+import ru.practicum.ewm.event.dto.EventWithCommentsDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
 import ru.practicum.ewm.event.dto.StateActionPrivate;
 import ru.practicum.ewm.event.dto.UpdateEventUserRequest;
@@ -55,11 +56,12 @@ import static ru.practicum.ewm.request.model.RequestStatus.CONFIRMED;
 public class EventPrivateService {
 
     private final CategoryRepository categoryRepository;
-    private final EventMapper eventMapper;
     private final EventRepository eventRepository;
-    private final RequestMapper requestMapper;
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
+
+    private final EventMapper eventMapper;
+    private final RequestMapper requestMapper;
 
     private final Map<StateActionPrivate, Consumer<Event>> settingEventStatusMap = Map.of(
             SEND_TO_REVIEW, event -> event.setState(EventState.PENDING),
@@ -97,14 +99,14 @@ public class EventPrivateService {
         return eventMapper.toEventFullDto(eventToCreate);
     }
 
-    public EventFullDto getById(Long userId, Long eventId) {
+    public EventWithCommentsDto getById(Long userId, Long eventId) {
         log.debug("Get Event by ID: {} for user with ID: {}.", eventId, userId);
         verifyUserExists(userId);
 
         Event foundEvent = eventRepository
                 .findEventByInitiatorIdAndId(userId, eventId)
                 .orElseThrow(() -> new NotFoundException(format("Event with id: '%d' is not found", eventId)));
-        return eventMapper.toEventFullDto(foundEvent);
+        return eventMapper.toEventWithComments(foundEvent);
     }
 
     @Transactional

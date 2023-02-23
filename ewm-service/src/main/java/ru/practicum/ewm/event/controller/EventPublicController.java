@@ -22,6 +22,7 @@ import ru.practicum.ewm.EndpointHitClient;
 import ru.practicum.ewm.EndpointHitPost;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
+import ru.practicum.ewm.event.dto.EventWithCommentsDto;
 import ru.practicum.ewm.event.model.EventSearchSort;
 import ru.practicum.ewm.event.service.EventPublicService;
 
@@ -53,7 +54,7 @@ public class EventPublicController {
     }
 
     @GetMapping("/{eventId}")
-    public EventFullDto getById(@PathVariable Long eventId, HttpServletRequest request) {
+    public EventWithCommentsDto getById(@PathVariable Long eventId, HttpServletRequest request) {
         log.debug("Received the request to get Event with id: {}", eventId);
 
         endpointHitClient.postHit(buildEndpointHitPost(request));
