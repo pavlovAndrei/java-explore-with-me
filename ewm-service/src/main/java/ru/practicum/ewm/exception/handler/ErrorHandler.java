@@ -29,7 +29,7 @@ public class ErrorHandler {
     @ResponseStatus(BAD_REQUEST)
     public ResponseEntity<Object> handleNotValidMethodArgument(final MethodArgumentNotValidException e) {
         log.warn(e.getMessage());
-        return buildResponseEntity(new ApiError(e.getMessage(),
+        return buildResponseEntity(new ApiError(e.getFieldError().getDefaultMessage(),
                 "Incorrectly made request.", BAD_REQUEST, now()));
     }
 
